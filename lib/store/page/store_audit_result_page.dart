@@ -6,9 +6,8 @@ import 'package:flutter_deer/widgets/load_image.dart';
 import 'package:flutter_deer/widgets/my_app_bar.dart';
 import 'package:flutter_deer/widgets/my_button.dart';
 
-/// design/2店铺审核/index.html#artboard2
+/// design/2Store review/index.html#artboard2
 class StoreAuditResultPage extends StatefulWidget {
-
   const StoreAuditResultPage({super.key});
 
   @override
@@ -20,20 +19,21 @@ class _StoreAuditResultPageState extends State<StoreAuditResultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const MyAppBar(
-        title: '审核结果',
+        title: 'Audit results',
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: <Widget>[
             Gaps.vGap50,
-            const LoadAssetImage('store/icon_success',
+            const LoadAssetImage(
+              'store/icon_success',
               width: 80.0,
               height: 80.0,
             ),
             Gaps.vGap12,
             const Text(
-              '恭喜，店铺资料审核成功',
+              'Congratulations, the store information audit is successful',
               style: TextStyles.textSize16,
             ),
             Gaps.vGap8,
@@ -43,7 +43,7 @@ class _StoreAuditResultPageState extends State<StoreAuditResultPage> {
             ),
             Gaps.vGap8,
             Text(
-              '预计完成时间：02月28日',
+              'Estimated completion time: February 28',
               style: Theme.of(context).textTheme.titleSmall,
             ),
             Gaps.vGap24,
@@ -51,7 +51,7 @@ class _StoreAuditResultPageState extends State<StoreAuditResultPage> {
               onPressed: () {
                 NavigatorUtils.push(context, Routes.home, clearStack: true);
               },
-              text: '进入',
+              text: 'Enter',
             )
           ],
         ),
