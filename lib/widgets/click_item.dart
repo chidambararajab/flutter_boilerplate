@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_deer/res/resources.dart';
 
 class ClickItem extends StatelessWidget {
-
-  const ClickItem({
-    super.key,
-    this.onTap,
-    required this.title,
-    this.content = '',
-    this.textAlign = TextAlign.start,
-    this.maxLines = 1
-  });
+  const ClickItem(
+      {super.key,
+      this.onTap,
+      required this.title,
+      this.content = '',
+      this.textAlign = TextAlign.start,
+      this.maxLines = 1});
 
   final GestureTapCallback? onTap;
   final String title;
@@ -21,8 +19,9 @@ class ClickItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget child = Row(
-      //为了数字类文字居中
-      crossAxisAlignment: maxLines == 1 ? CrossAxisAlignment.center : CrossAxisAlignment.start,
+      //For numeric text to center
+      crossAxisAlignment:
+          maxLines == 1 ? CrossAxisAlignment.center : CrossAxisAlignment.start,
       children: <Widget>[
         Text(title),
         const Spacer(),
@@ -34,12 +33,15 @@ class ClickItem extends StatelessWidget {
             maxLines: maxLines,
             textAlign: maxLines == 1 ? TextAlign.right : textAlign,
             overflow: TextOverflow.ellipsis,
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: Dimens.font_sp14),
+            style: Theme.of(context)
+                .textTheme
+                .titleSmall
+                ?.copyWith(fontSize: Dimens.font_sp14),
           ),
         ),
         Gaps.hGap8,
         Opacity(
-          // 无点击事件时，隐藏箭头图标
+          // When there is no click event, hide the arrow icon
           opacity: onTap == null ? 0 : 1,
           child: Padding(
             padding: EdgeInsets.only(top: maxLines == 1 ? 0.0 : 2.0),
@@ -48,8 +50,8 @@ class ClickItem extends StatelessWidget {
         )
       ],
     );
-    
-    /// 分隔线
+
+    /// dividing line
     child = Container(
       margin: const EdgeInsets.only(left: 15.0),
       padding: const EdgeInsets.fromLTRB(0, 15.0, 15.0, 15.0),
@@ -64,7 +66,7 @@ class ClickItem extends StatelessWidget {
       ),
       child: child,
     );
-    
+
     return InkWell(
       onTap: onTap,
       child: child,

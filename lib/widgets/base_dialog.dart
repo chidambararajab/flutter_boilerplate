@@ -4,16 +4,14 @@ import 'package:flutter_deer/routers/fluro_navigator.dart';
 import 'package:flutter_deer/util/device_utils.dart';
 import 'package:flutter_deer/widgets/my_button.dart';
 
-/// 自定义dialog的模板
+/// Custom dialog template
 class BaseDialog extends StatelessWidget {
-
-  const BaseDialog({
-    super.key,
-    this.title,
-    this.onPressed,
-    this.hiddenTitle = false,
-    required this.child
-  });
+  const BaseDialog(
+      {super.key,
+      this.title,
+      this.onPressed,
+      this.hiddenTitle = false,
+      required this.child});
 
   final String? title;
   final VoidCallback? onPressed;
@@ -22,7 +20,6 @@ class BaseDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final Widget dialogTitle = Visibility(
       visible: !hiddenTitle,
       child: Padding(
@@ -37,7 +34,7 @@ class BaseDialog extends StatelessWidget {
     final Widget bottomButton = Row(
       children: <Widget>[
         _DialogButton(
-          text: '取消',
+          text: 'Cancel',
           textColor: Colours.text_gray,
           onPressed: () => NavigatorUtils.goBack(context),
         ),
@@ -47,13 +44,13 @@ class BaseDialog extends StatelessWidget {
           child: VerticalDivider(),
         ),
         _DialogButton(
-          text: '确定',
+          text: 'Sure',
           textColor: Theme.of(context).primaryColor,
           onPressed: onPressed,
         ),
       ],
     );
-    
+
     final Widget content = Material(
       borderRadius: BorderRadius.circular(8.0),
       child: Column(
@@ -83,9 +80,9 @@ class BaseDialog extends StatelessWidget {
       ),
     );
 
-    /// Android 11添加了键盘弹出动画，这与我添加的过渡动画冲突（原先iOS、Android 没有相关过渡动画，相关问题跟踪：https://github.com/flutter/flutter/issues/19279）。
-    /// 因为在Android 11上，viewInsets的值在键盘弹出过程中是变化的（以前只有开始结束的值）。
-    /// 所以解决方法就是在Android 11及以上系统中使用Padding代替AnimatedPadding。
+    /// Android 11 has added a keyboard pop-up animation, which conflicts with the transition animation I added (the original iOS and Android did not have related transition animations, related issue tracking：https://github.com/flutter/flutter/issues/19279）。
+    /// Because on Android 11, the value of viewInsets changes during the keyboard popup process (previously only the beginning and end values)。
+    /// So the solution is to use Padding instead of AnimatedPadding in Android 11 and above.
 
     if (Device.getAndroidSdkInt() >= 30) {
       return Padding(
@@ -104,17 +101,16 @@ class BaseDialog extends StatelessWidget {
 }
 
 class _DialogButton extends StatelessWidget {
-  
   const _DialogButton({
     required this.text,
     this.textColor,
     this.onPressed,
   });
-  
+
   final String text;
   final Color? textColor;
   final VoidCallback? onPressed;
-  
+
   @override
   Widget build(BuildContext context) {
     return Expanded(
