@@ -98,45 +98,45 @@ class BezierChart extends StatefulWidget {
     required this.series,
     this.onScaleChanged,
   })  : assert(
-  (bezierChartScale == BezierChartScale.CUSTOM) ||
-      bezierChartScale != BezierChartScale.CUSTOM,
-  'The xAxisCustomValues and series must not be null',
-  ),
-        assert(
-        bezierChartScale == BezierChartScale.CUSTOM &&
-            _isSorted(xAxisCustomValues) ||
-            bezierChartScale != BezierChartScale.CUSTOM,
-        'The xAxisCustomValues must be sorted in increasing way',
+          (bezierChartScale == BezierChartScale.CUSTOM) ||
+              bezierChartScale != BezierChartScale.CUSTOM,
+          'The xAxisCustomValues and series must not be null',
         ),
         assert(
-        bezierChartScale == BezierChartScale.CUSTOM &&
-            _compareLengths(xAxisCustomValues.length, series) ||
-            bezierChartScale != BezierChartScale.CUSTOM,
-        'xAxisCustomValues lenght must be equals to series length',
+          bezierChartScale == BezierChartScale.CUSTOM &&
+                  _isSorted(xAxisCustomValues) ||
+              bezierChartScale != BezierChartScale.CUSTOM,
+          'The xAxisCustomValues must be sorted in increasing way',
         ),
         assert(
-        (bezierChartScale == BezierChartScale.CUSTOM &&
-            _areAllPositive(xAxisCustomValues) &&
-            _checkCustomValues(series)) ||
-            bezierChartScale != BezierChartScale.CUSTOM,
-        'xAxisCustomValues and series must be positives',
+          bezierChartScale == BezierChartScale.CUSTOM &&
+                  _compareLengths(xAxisCustomValues.length, series) ||
+              bezierChartScale != BezierChartScale.CUSTOM,
+          'xAxisCustomValues lenght must be equals to series length',
         ),
         assert(
-        (((bezierChartScale != BezierChartScale.CUSTOM) &&
-            fromDate != null &&
-            toDate != null) ||
-            (bezierChartScale == BezierChartScale.CUSTOM &&
-                fromDate == null &&
-                toDate == null)),
-        'fromDate and toDate must not be null',
+          (bezierChartScale == BezierChartScale.CUSTOM &&
+                  _areAllPositive(xAxisCustomValues) &&
+                  _checkCustomValues(series)) ||
+              bezierChartScale != BezierChartScale.CUSTOM,
+          'xAxisCustomValues and series must be positives',
         ),
         assert(
-        (((bezierChartScale != BezierChartScale.CUSTOM) &&
-            toDate!.isAfter(fromDate!)) ||
-            (bezierChartScale == BezierChartScale.CUSTOM &&
-                fromDate == null &&
-                toDate == null)),
-        'toDate must be after of fromDate',
+          (((bezierChartScale != BezierChartScale.CUSTOM) &&
+                  fromDate != null &&
+                  toDate != null) ||
+              (bezierChartScale == BezierChartScale.CUSTOM &&
+                  fromDate == null &&
+                  toDate == null)),
+          'fromDate and toDate must not be null',
+        ),
+        assert(
+          (((bezierChartScale != BezierChartScale.CUSTOM) &&
+                  toDate!.isAfter(fromDate!)) ||
+              (bezierChartScale == BezierChartScale.CUSTOM &&
+                  fromDate == null &&
+                  toDate == null)),
+          'toDate must be after of fromDate',
         ),
         super(key: key);
 
@@ -156,7 +156,7 @@ class BezierChartState extends State<BezierChart>
   bool _displayIndicator = false;
 
   ///padding for leading and trailing of the chart
-  // TODO(weilu): 修改处 horizontalPadding = 50.0;
+  // TODO(weilu): Amendments horizontalPadding = 50.0;
   final double horizontalPadding = 11.0;
 
   ///spacing between each datapoint
@@ -210,7 +210,7 @@ class BezierChartState extends State<BezierChart>
     final RenderBox renderBox = context.findRenderObject() as RenderBox;
     final position = renderBox.globalToLocal(globalPosition);
     return setState(
-          () {
+      () {
         final fixedPosition = Offset(
             position.dx + _scrollController.offset - horizontalPadding,
             position.dy);
@@ -242,9 +242,9 @@ class BezierChartState extends State<BezierChart>
         widget.onIndicatorVisible!(false);
       }
       _animationController.reverse(from: 1.0).whenCompleteOrCancel(
-            () {
+        () {
           setState(
-                () {
+            () {
               _displayIndicator = false;
             },
           );
@@ -329,8 +329,8 @@ class BezierChartState extends State<BezierChart>
         widget.toDate!.month,
       );
       for (int i = 0;
-      (startDate.isBefore(endDate) || areEqualDates(startDate, endDate));
-      i++) {
+          (startDate.isBefore(endDate) || areEqualDates(startDate, endDate));
+          i++) {
         _xAxisDataPoints.add(
           DataPoint<DateTime>(value: (i * 5).toDouble(), xAxis: startDate),
         );
@@ -345,8 +345,8 @@ class BezierChartState extends State<BezierChart>
         widget.toDate!.year,
       );
       for (int i = 0;
-      (startDate.isBefore(endDate) || areEqualDates(startDate, endDate));
-      i++) {
+          (startDate.isBefore(endDate) || areEqualDates(startDate, endDate));
+          i++) {
         _xAxisDataPoints.add(
           DataPoint<DateTime>(value: (i * 5).toDouble(), xAxis: startDate),
         );
@@ -404,26 +404,26 @@ class BezierChartState extends State<BezierChart>
     _yAxisWidth = _keyLastYAxisItem.currentContext?.size?.width ?? 0;
     //Move to selected position
     if ((widget.selectedDate != null &&
-        _currentBezierChartScale != BezierChartScale.CUSTOM) ||
+            _currentBezierChartScale != BezierChartScale.CUSTOM) ||
         (widget.selectedValue != null &&
             _currentBezierChartScale == BezierChartScale.CUSTOM)) {
       int index = -1;
       if (_currentBezierChartScale == BezierChartScale.WEEKLY) {
-        index = _xAxisDataPoints.indexWhere(
-                (dp) => areEqualDates((dp.xAxis as DateTime), widget.selectedDate!));
+        index = _xAxisDataPoints.indexWhere((dp) =>
+            areEqualDates((dp.xAxis as DateTime), widget.selectedDate!));
       } else if (_currentBezierChartScale == BezierChartScale.HOURLY) {
         index = _xAxisDataPoints.indexWhere((dp) =>
-        (dp.xAxis as DateTime).year == widget.selectedDate!.year &&
+            (dp.xAxis as DateTime).year == widget.selectedDate!.year &&
             (dp.xAxis as DateTime).month == widget.selectedDate!.month &&
             (dp.xAxis as DateTime).day == widget.selectedDate!.day &&
             (dp.xAxis as DateTime).hour == widget.selectedDate!.hour);
       } else if (_currentBezierChartScale == BezierChartScale.MONTHLY) {
         index = _xAxisDataPoints.indexWhere((dp) =>
-        (dp.xAxis as DateTime).year == widget.selectedDate!.year &&
+            (dp.xAxis as DateTime).year == widget.selectedDate!.year &&
             (dp.xAxis as DateTime).month == widget.selectedDate!.month);
       } else if (_currentBezierChartScale == BezierChartScale.YEARLY) {
         index = _xAxisDataPoints.indexWhere(
-                (dp) => (dp.xAxis as DateTime).year == widget.selectedDate!.year);
+            (dp) => (dp.xAxis as DateTime).year == widget.selectedDate!.year);
       } else if (_currentBezierChartScale == BezierChartScale.CUSTOM) {
         index = _xAxisDataPoints
             .indexWhere((dp) => (dp.xAxis as double) == widget.selectedValue);
@@ -438,7 +438,7 @@ class BezierChartState extends State<BezierChart>
               Offset(isOnlyOneAxis ? 0.0 : (index * space) + space / 2, 0.0);
           _scrollController.jumpTo((index * space));
           setState(
-                () {
+            () {
               _verticalIndicatorPosition = fixedPosition;
               _onDisplayIndicator(
                 LongPressMoveUpdateDetails(
@@ -459,7 +459,7 @@ class BezierChartState extends State<BezierChart>
               isOnlyOneAxis
                   ? 0.0
                   : (index * horizontalSpacing + 2 * horizontalPadding) -
-                  _scrollController.offset,
+                      _scrollController.offset,
               0.0);
           _verticalIndicatorPosition = fixedPosition;
           _onDisplayIndicator(
@@ -500,15 +500,15 @@ class BezierChartState extends State<BezierChart>
           String key;
           if (_currentBezierChartScale == BezierChartScale.MONTHLY) {
             key =
-            '${dataPoint.xAxis.year},${dataPoint.xAxis.month.toString().padLeft(2, '0')}';
+                '${dataPoint.xAxis.year},${dataPoint.xAxis.month.toString().padLeft(2, '0')}';
           } else if (_currentBezierChartScale == BezierChartScale.YEARLY) {
             key = '${dataPoint.xAxis.year}';
           } else if (_currentBezierChartScale == BezierChartScale.WEEKLY) {
             key =
-            '${dataPoint.xAxis.year},${dataPoint.xAxis.month.toString().padLeft(2, '0')},${dataPoint.xAxis.day.toString().padLeft(2, '0')}';
+                '${dataPoint.xAxis.year},${dataPoint.xAxis.month.toString().padLeft(2, '0')},${dataPoint.xAxis.day.toString().padLeft(2, '0')}';
           } else {
             key =
-            '${dataPoint.xAxis.year},${dataPoint.xAxis.month.toString().padLeft(2, '0')},${dataPoint.xAxis.day.toString().padLeft(2, '0')},${dataPoint.xAxis.hour.toString().padLeft(2, '0')}';
+                '${dataPoint.xAxis.year},${dataPoint.xAxis.month.toString().padLeft(2, '0')},${dataPoint.xAxis.day.toString().padLeft(2, '0')},${dataPoint.xAxis.hour.toString().padLeft(2, '0')}';
           }
 
           //support aggregations for y axis
@@ -523,7 +523,7 @@ class BezierChartState extends State<BezierChart>
           valueMap = tmpMap.map((k, v) => MapEntry(
               k,
               v.reduce(
-                      (c1, c2) => double.parse((c1 + c2).toStringAsFixed(2)))));
+                  (c1, c2) => double.parse((c1 + c2).toStringAsFixed(2)))));
         } else if (widget.bezierChartAggregation ==
             BezierChartAggregation.FIRST) {
           valueMap =
@@ -531,23 +531,23 @@ class BezierChartState extends State<BezierChart>
         } else if (widget.bezierChartAggregation ==
             BezierChartAggregation.AVERAGE) {
           valueMap = tmpMap.map(
-                  (k, v) => MapEntry(k, v.reduce((c1, c2) => c1 + c2) / v.length));
+              (k, v) => MapEntry(k, v.reduce((c1, c2) => c1 + c2) / v.length));
         } else if (widget.bezierChartAggregation ==
             BezierChartAggregation.COUNT) {
           valueMap = tmpMap.map((k, v) => MapEntry(k, v.length.toDouble()));
         } else if (widget.bezierChartAggregation ==
             BezierChartAggregation.MAX) {
           valueMap = tmpMap.map(
-                  (k, v) => MapEntry(k, v.reduce((c1, c2) => c1 > c2 ? c1 : c2)));
+              (k, v) => MapEntry(k, v.reduce((c1, c2) => c1 > c2 ? c1 : c2)));
         } else if (widget.bezierChartAggregation ==
             BezierChartAggregation.MIN) {
           valueMap = tmpMap.map(
-                  (k, v) => MapEntry(k, v.reduce((c1, c2) => c1 < c2 ? c1 : c2)));
+              (k, v) => MapEntry(k, v.reduce((c1, c2) => c1 < c2 ? c1 : c2)));
         }
 
         List<DataPoint<DateTime>> newDataPoints = [];
         valueMap.keys.forEach(
-              (key) {
+          (key) {
             final value = valueMap[key];
             if (!_yValues.contains(value)) _yValues.add(value!);
 
@@ -655,7 +655,7 @@ class BezierChartState extends State<BezierChart>
         }
         _currentScale = 1.0;
         setState(
-              () {
+          () {
             _buildXDataPoints();
             _computeSeries();
             _checkIfNeedScroll();
@@ -670,7 +670,7 @@ class BezierChartState extends State<BezierChart>
           _currentScale = 1.0;
           _previousScale = 1.0 / scale;
           setState(
-                () {
+            () {
               _buildXDataPoints();
               _computeSeries();
               _checkIfNeedScroll();
@@ -682,7 +682,7 @@ class BezierChartState extends State<BezierChart>
           _currentScale = 1.0;
           _previousScale = 1.0 / scale;
           setState(
-                () {
+            () {
               _buildXDataPoints();
               _computeSeries();
               _checkIfNeedScroll();
@@ -695,7 +695,7 @@ class BezierChartState extends State<BezierChart>
         if (scale > 2.5) scale = 2.5;
         if (scale != _currentScale) {
           setState(
-                () {
+            () {
               _currentScale = scale;
             },
           );
@@ -755,7 +755,7 @@ class BezierChartState extends State<BezierChart>
 //      _buildXDataPoints();
 //      _computeSeries();
 //    }
-    // TODO(weilu): 修改处
+    // TODO(weilu): Amendments
     if (oldWidget.series != widget.series) {
       _currentBezierChartScale = widget.bezierChartScale;
       _buildXDataPoints();
@@ -797,7 +797,7 @@ class BezierChartState extends State<BezierChart>
       label: '长按查看详细数据',
       child: Container(
         decoration: BoxDecoration(
-          // TODO(weilu): 修改处
+          // TODO(weilu): Amendments
 //        color: widget.config.backgroundGradient != null
 //            ? null
 //            : widget.config.backgroundColor,
@@ -825,12 +825,13 @@ class BezierChartState extends State<BezierChart>
             onScaleStart: (_) {
               _previousScale = _currentScale;
             },
-            onScaleUpdate: _currentBezierChartScale != BezierChartScale.CUSTOM &&
-                //Hourly chart doesn't support pinch/zoom for now
-                _currentBezierChartScale != BezierChartScale.HOURLY &&
-                !_displayIndicator
-                ? (details) => _onPinchZoom(_previousScale * details.scale)
-                : null,
+            onScaleUpdate:
+                _currentBezierChartScale != BezierChartScale.CUSTOM &&
+                        //Hourly chart doesn't support pinch/zoom for now
+                        _currentBezierChartScale != BezierChartScale.HOURLY &&
+                        !_displayIndicator
+                    ? (details) => _onPinchZoom(_previousScale * details.scale)
+                    : null,
             onTap: widget.config.updatePositionOnTap
                 ? null
                 : (isPinchZoomActive ? null : _onHideIndicator),
@@ -850,7 +851,8 @@ class BezierChartState extends State<BezierChart>
                         : widget.config.physics,
                     key: _keyScroll,
                     scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: horizontalPadding),
                     child: Align(
                       alignment: Alignment(0.0, 0.7),
                       child: CustomPaint(
@@ -882,10 +884,11 @@ class BezierChartState extends State<BezierChart>
                               ? _scrollController.offset
                               : 0.0,
                           footerValueBuilder: widget.footerValueBuilder,
-                          bubbleLabelValueBuilder: widget.bubbleLabelValueBuilder,
+                          bubbleLabelValueBuilder:
+                              widget.bubbleLabelValueBuilder,
                           footerDateTimeBuilder: widget.footerDateTimeBuilder,
                           bubbleLabelDateTimeBuilder:
-                          widget.bubbleLabelDateTimeBuilder,
+                              widget.bubbleLabelDateTimeBuilder,
                           onValueSelected: (val) {
                             if (widget.onValueSelected != null) {
                               if (_valueSelected == null) {
@@ -907,7 +910,8 @@ class BezierChartState extends State<BezierChart>
                               } else {
                                 if (_dateTimeSelected != val) {
                                   _dateTimeSelected = val;
-                                  widget.onDateTimeSelected!(_dateTimeSelected!);
+                                  widget
+                                      .onDateTimeSelected!(_dateTimeSelected!);
                                 }
                               }
                             }
@@ -928,7 +932,7 @@ class BezierChartState extends State<BezierChart>
                         width: _yAxisWidth + 10,
                         decoration: widget.config.backgroundGradient != null
                             ? BoxDecoration(
-                            gradient: widget.config.backgroundGradient)
+                                gradient: widget.config.backgroundGradient)
                             : null,
                         color: widget.config.backgroundGradient != null
                             ? null
@@ -937,25 +941,26 @@ class BezierChartState extends State<BezierChart>
                     ));
                   }
 
-                  final fontSize = widget.config.yAxisTextStyle?.fontSize ?? 8.0;
+                  final fontSize =
+                      widget.config.yAxisTextStyle?.fontSize ?? 8.0;
                   final maxValue = _yValues.last -
                       (widget.config.startYAxisFromNonZeroValue
                           ? _yValues.first
                           : 0.0);
                   final steps = widget.config.stepsYAxis != null &&
-                      widget.config.stepsYAxis! > 0
+                          widget.config.stepsYAxis! > 0
                       ? widget.config.stepsYAxis
                       : null;
                   _addYItem(double value, {Key? key}) {
                     items.add(
                       Positioned(
                         bottom: _getRealValue(
-                            value -
-                                (widget.config.startYAxisFromNonZeroValue
-                                    ? _yValues.first
-                                    : 0.0),
-                            maxHeight - widget.config.footerHeight,
-                            maxValue) +
+                                value -
+                                    (widget.config.startYAxisFromNonZeroValue
+                                        ? _yValues.first
+                                        : 0.0),
+                                maxHeight - widget.config.footerHeight,
+                                maxValue) +
                             widget.config.footerHeight +
                             fontSize / 2,
                         left: 10.0,
@@ -963,7 +968,8 @@ class BezierChartState extends State<BezierChart>
                           formatAsIntOrDouble(value),
                           key: key,
                           style: widget.config.yAxisTextStyle ??
-                              TextStyle(color: Colors.white, fontSize: fontSize),
+                              TextStyle(
+                                  color: Colors.white, fontSize: fontSize),
                         ),
                       ),
                     );
@@ -1182,7 +1188,8 @@ class _BezierChartPainter extends CustomPainter {
           if (value == 0) {
             if (line.onMissingValue != null) {
               isMissingValue = true;
-              value = line.onMissingValue!(xAxisDataPoints[i].xAxis as DateTime);
+              value =
+                  line.onMissingValue!(xAxisDataPoints[i].xAxis as DateTime);
             }
           }
         }
@@ -1295,22 +1302,22 @@ class _BezierChartPainter extends CustomPainter {
       if (config.showDataPoints) {
         //draw data points
         //Data points won't work until Flutter team fix this issue : https://github.com/flutter/flutter/issues/32218
-//        if (!kIsWeb) { // TODO(weilu): web已支持
-          canvas.drawPoints(
-              PointMode.points,
-              dataPoints,
-              paintControlPoints
-                ..style = PaintingStyle.stroke
-                ..strokeWidth = 9
-                ..color = line.dataPointStrokeColor);
-          canvas.drawPoints(
+//        if (!kIsWeb) { // TODO(weilu): web already supported
+        canvas.drawPoints(
             PointMode.points,
             dataPoints,
             paintControlPoints
-              ..style = PaintingStyle.fill
-              ..strokeWidth = line.lineStrokeWidth * 2
-              ..color = line.dataPointFillColor,
-          );
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 9
+              ..color = line.dataPointStrokeColor);
+        canvas.drawPoints(
+          PointMode.points,
+          dataPoints,
+          paintControlPoints
+            ..style = PaintingStyle.fill
+            ..strokeWidth = line.lineStrokeWidth * 2
+            ..color = line.dataPointFillColor,
+        );
 //        }
       }
     }
@@ -1374,9 +1381,8 @@ class _BezierChartPainter extends CustomPainter {
       //calculate the total lenght of the lines
       List<TextSpan> textValues = [];
       List<Offset> centerCircles = [];
-      // TODO(weilu): 修改处 infoHeight / (8.75)
-      double space =
-          10 - ((infoHeight / (4)) * _currentCustomValues.length);
+      // TODO(weilu): Amendments infoHeight / (8.75)
+      double space = 10 - ((infoHeight / (4)) * _currentCustomValues.length);
       infoHeight =
           infoHeight + (_currentCustomValues.length - 1) * (infoHeight / 3);
 
@@ -1411,7 +1417,7 @@ class _BezierChartPainter extends CustomPainter {
         textAlign: TextAlign.center,
         text: TextSpan(
           text: _getInfoTitleText(),
-          // TODO(weilu): 修改处 9.5
+          // TODO(weilu): Amendments 9.5
           style: config.bubbleIndicatorTitleStyle.copyWith(fontSize: 5.0),
           children: textValues,
         ),
@@ -1484,7 +1490,7 @@ class _BezierChartPainter extends CustomPainter {
         textPainter.paint(
           canvas,
           Offset(
-            center.dx - textPainter.width / 2 + 6,  // TODO 0
+            center.dx - textPainter.width / 2 + 6, // TODO 0
             center.dy - offsetInfo - infoHeight / 2.5,
           ),
         );
@@ -1589,7 +1595,7 @@ class _BezierChartPainter extends CustomPainter {
       final dateFormat = intl.DateFormat('MMM');
       final dateFormatYear = intl.DateFormat('y');
       final year =
-      dateFormatYear.format(dataPoint.xAxis as DateTime).substring(2);
+          dateFormatYear.format(dataPoint.xAxis as DateTime).substring(2);
       return "${dateFormat.format(dataPoint.xAxis as DateTime)}\n'$year";
     } else if (scale == BezierChartScale.YEARLY) {
       final dateFormat = intl.DateFormat('y');
@@ -1623,7 +1629,10 @@ class _BezierChartPainter extends CustomPainter {
     return y;
   }
 
-  Rect _fromCenter({required Offset center, required double width, required double height}) =>
+  Rect _fromCenter(
+          {required Offset center,
+          required double width,
+          required double height}) =>
       Rect.fromLTRB(
         center.dx - width / 2,
         center.dy - height / 2,
@@ -1637,8 +1646,9 @@ class _BezierChartPainter extends CustomPainter {
 //          oldDelegate.verticalIndicatorPosition != verticalIndicatorPosition ||
 //          oldDelegate.scrollOffset != scrollOffset ||
 //          oldDelegate.showIndicator != showIndicator;
-  // TODO(weilu): 修改处
-  oldDelegate.series != series || oldDelegate.verticalIndicatorPosition != verticalIndicatorPosition;
+      // TODO(weilu): Amendments
+      oldDelegate.series != series ||
+      oldDelegate.verticalIndicatorPosition != verticalIndicatorPosition;
 }
 
 class _AxisValue {
@@ -1713,11 +1723,11 @@ class _CustomValue {
 
 bool areEqualDates(DateTime dateTime1, DateTime dateTime2) =>
     dateTime1.year == dateTime2.year &&
-        dateTime1.month == dateTime2.month &&
-        dateTime1.day == dateTime2.day;
+    dateTime1.month == dateTime2.month &&
+    dateTime1.day == dateTime2.day;
 
 bool areEqualDatesIncludingHour(DateTime dateTime1, DateTime dateTime2) =>
-    dateTime1.year == dateTime2.year && 
-        dateTime1.month == dateTime2.month &&
-        dateTime1.day == dateTime2.day &&
-        dateTime1.hour == dateTime2.hour;
+    dateTime1.year == dateTime2.year &&
+    dateTime1.month == dateTime2.month &&
+    dateTime1.day == dateTime2.day &&
+    dateTime1.hour == dateTime2.hour;
