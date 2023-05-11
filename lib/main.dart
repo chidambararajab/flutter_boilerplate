@@ -28,21 +28,22 @@ Future<void> main() async {
 //  debugProfilePaintsEnabled = true;
 //  debugRepaintRainbowEnabled = true;
 
-  /// 确保初始化完成
+  /// Make sure initialization is complete
   WidgetsFlutterBinding.ensureInitialized();
 
   if (Device.isDesktop) {
     await WindowManager.instance.ensureInitialized();
     windowManager.waitUntilReadyToShow().then((_) async {
-      /// 隐藏标题栏及操作按钮
+      /// Hide the title bar and action buttons
       // await windowManager.setTitleBarStyle(
       //   TitleBarStyle.hidden,
       //   windowButtonVisibility: false,
       // );
-      /// 设置桌面端窗口大小
+      /// Set the desktop window size
       await windowManager.setSize(const Size(400, 800));
       await windowManager.setMinimumSize(const Size(400, 800));
-      /// 居中显示
+
+      /// center display
       await windowManager.center();
       await windowManager.show();
       await windowManager.setPreventClose(false);
@@ -50,22 +51,23 @@ Future<void> main() async {
     });
   }
 
-  /// 去除URL中的“#”(hash)，仅针对Web。默认为setHashUrlStrategy
-  /// 注意本地部署和远程部署时`web/index.html`中的base标签，https://github.com/flutter/flutter/issues/69760
+  /// Remove the "#" (hash) in the URL, only for the Web. Default is setHashUrlStrategy
+  /// Pay attention to the base tag in `web/index.html` when deploying locally and remotely，https://github.com/flutter/flutter/issues/69760
   setPathUrlStrategy();
 
   /// sp初始化
   await SpUtil.getInstance();
 
-  /// 1.22 预览功能: 在输入频率与显示刷新率不匹配情况下提供平滑的滚动效果
+  /// 1.22 Preview function: Provide smooth scrolling effect when the input frequency does not match the display refresh rate
   // GestureBinding.instance?.resamplingEnabled = true;
-  /// 异常处理
+  /// exception handling
   handleError(() => runApp(MyApp()));
 
-  /// 隐藏状态栏。为启动页、引导页设置。完成后修改回显示状态栏。
-  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.bottom]);
-  // TODO(weilu): 启动体验不佳。状态栏、导航栏在冷启动开始的一瞬间为黑色，且无法通过隐藏、修改颜色等方式进行处理。。。
-  // 相关问题跟踪：https://github.com/flutter/flutter/issues/73351
+  /// Hide the status bar. Set for startup page, guide page. After completion, modify it back to display the status bar.
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+      overlays: [SystemUiOverlay.bottom]);
+  // TODO(weilu): Poor startup experience. The status bar and navigation bar are black at the beginning of the cold start, and cannot be processed by hiding or modifying the color。。。
+  // Related issue tracking：https://github.com/flutter/flutter/issues/73351
 }
 
 class MyApp extends StatelessWidget {
@@ -83,18 +85,18 @@ class MyApp extends StatelessWidget {
   void initDio() {
     final List<Interceptor> interceptors = <Interceptor>[];
 
-    /// 统一添加身份验证请求头
+    /// Uniformly add authentication request header
     interceptors.add(AuthInterceptor());
 
-    /// 刷新Token
+    /// Refresh Token
     interceptors.add(TokenInterceptor());
 
-    /// 打印Log(生产模式去除)
+    /// Print Log (production mode removed)
     if (!Constant.inProduction) {
       interceptors.add(LoggingInterceptor());
     }
 
-    /// 适配数据(根据自己的数据结构，可自行选择添加)
+    /// Adaptation data (according to your own data structure, you can choose to add it yourself)
     interceptors.add(AdapterInterceptor());
     configDio(
       baseUrl: 'https://api.github.com/',
@@ -106,8 +108,8 @@ class MyApp extends StatelessWidget {
     if (Device.isMobile) {
       const QuickActions quickActions = QuickActions();
       if (Device.isIOS) {
-        // Android每次是重新启动activity，所以放在了splash_page处理。
-        // 总体来说使用不方便，这种动态的方式在安卓中局限性高。这里仅做练习使用。
+        // Android restarts the activity every time, so it is placed in splash_page for processing.
+        // Generally speaking, it is inconvenient to use, and this dynamic method has high limitations in Android. This is for practice only.
         quickActions.initialize((String shortcutType) async {
           if (shortcutType == 'demo') {
             navigatorKey.currentState?.push<dynamic>(MaterialPageRoute<dynamic>(
@@ -119,10 +121,7 @@ class MyApp extends StatelessWidget {
 
       quickActions.setShortcutItems(<ShortcutItem>[
         const ShortcutItem(
-          type: 'demo',
-          localizedTitle: 'Demo',
-          icon: 'flutter_dash_black'
-        ),
+            type: 'demo', localizedTitle: 'Demo', icon: 'flutter_dash_black'),
       ]);
     }
   }
@@ -135,30 +134,32 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LocaleProvider())
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
-        builder: (_, ThemeProvider provider, LocaleProvider localeProvider, __) {
+        builder:
+            (_, ThemeProvider provider, LocaleProvider localeProvider, __) {
           return _buildMaterialApp(provider, localeProvider);
         },
       ),
     );
 
-    /// Toast 配置
+    /// Toast configuration
     return OKToast(
-      backgroundColor: Colors.black54,
-      textPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-      radius: 20.0,
-      position: ToastPosition.bottom,
-      child: app
-    );
+        backgroundColor: Colors.black54,
+        textPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        radius: 20.0,
+        position: ToastPosition.bottom,
+        child: app);
   }
 
-  Widget _buildMaterialApp(ThemeProvider provider, LocaleProvider localeProvider) {
+  Widget _buildMaterialApp(
+      ThemeProvider provider, LocaleProvider localeProvider) {
     return MaterialApp(
       title: 'Flutter Deer',
-      // showPerformanceOverlay: true, //显示性能标签
-      // debugShowCheckedModeBanner: false, // 去除右上角debug的标签
+      // showPerformanceOverlay: true, // show performance tab
+      // debugShowCheckedModeBanner: false, // Remove the debug label in the upper right corner
       // checkerboardRasterCacheImages: true,
-      // showSemanticsDebugger: true, // 显示语义视图
-      // checkerboardOffscreenLayers: true, // 检查离屏渲染
+      // showSemanticsDebugger: true, // show semantic view
+      // checkerboardOffscreenLayers: true, // Check off-screen rendering
 
       theme: theme ?? provider.getTheme(),
       darkTheme: provider.getTheme(isDarkMode: true),
@@ -170,20 +171,20 @@ class MyApp extends StatelessWidget {
       locale: localeProvider.locale,
       navigatorKey: navigatorKey,
       builder: (BuildContext context, Widget? child) {
-        /// 仅针对安卓
+        /// for android only
         if (Device.isAndroid) {
-          /// 切换深色模式会触发此方法，这里设置导航栏颜色
+          /// Switching the dark mode will trigger this method, set the color of the navigation bar here
           ThemeUtils.setSystemNavigationBar(provider.getThemeMode());
         }
 
-        /// 保证文字大小不受手机系统设置影响 https://www.kikt.top/posts/flutter/layout/dynamic-text/
+        /// Ensure that the text size is not affected by the phone system settings https://www.kikt.top/posts/flutter/layout/dynamic-text/
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
           child: child!,
         );
       },
 
-      /// 因为使用了fluro，这里设置主要针对Web
+      /// Because fluro is used, this setting is mainly for the Web
       onUnknownRoute: (_) {
         return MaterialPageRoute<void>(
           builder: (BuildContext context) => const NotFoundPage(),
