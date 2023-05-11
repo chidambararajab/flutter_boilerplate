@@ -3,9 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_deer/res/resources.dart';
 import 'package:flutter_deer/util/input_formatter/number_text_input_formatter.dart';
 
-/// 封装输入框
+/// Encapsulation input box
 class TextFieldItem extends StatelessWidget {
-
   const TextFieldItem({
     super.key,
     this.controller,
@@ -38,7 +37,7 @@ class TextFieldItem extends StatelessWidget {
               //style: TextStyles.textDark14,
               decoration: InputDecoration(
                 hintText: hintText,
-                border: InputBorder.none, //去掉下划线
+                border: InputBorder.none, //remove the underscore
                 //hintStyle: TextStyles.textGrayC14
               ),
             ),
@@ -47,7 +46,7 @@ class TextFieldItem extends StatelessWidget {
         Gaps.hGap16
       ],
     );
-    
+
     return Container(
       height: 50.0,
       margin: const EdgeInsets.only(left: 16.0),
@@ -65,7 +64,8 @@ class TextFieldItem extends StatelessWidget {
     if (keyboardType == const TextInputType.numberWithOptions(decimal: true)) {
       return <TextInputFormatter>[UsNumberTextInputFormatter()];
     }
-    if (keyboardType == TextInputType.number || keyboardType == TextInputType.phone) {
+    if (keyboardType == TextInputType.number ||
+        keyboardType == TextInputType.phone) {
       return <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly];
     }
     return null;
