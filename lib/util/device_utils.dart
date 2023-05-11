@@ -25,7 +25,7 @@ class Device {
     }
   }
 
-  /// 使用前记得初始化
+  /// Remember to initialize before use
   static int getAndroidSdkInt() {
     if (Constant.isDriverTest) {
       return -1;

@@ -21,7 +21,6 @@ class DateUtils {
   static String apiDayFormat(DateTime d) => _apiDayFormat.format(d);
   static String apiDayFormat2(DateTime d) => _apiDayFormat2.format(d);
 
-
   static const List<String> weekdays = [
     'Sun',
     'Mon',
@@ -32,7 +31,7 @@ class DateUtils {
     'Sat'
   ];
 
-  /// 周一开始
+  /// start monday
   static List<DateTime> daysInMonth(DateTime month) {
     final first = firstDayOfMonth(month);
     final daysBefore = first.weekday - 1;

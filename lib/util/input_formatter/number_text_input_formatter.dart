@@ -1,20 +1,17 @@
 import 'package:flutter/services.dart';
 
-/// 数字、小数格式化（默认两位小数）
+/// Number, decimal formatting (default two decimal places)
 class UsNumberTextInputFormatter extends TextInputFormatter {
+  UsNumberTextInputFormatter({this.digit = 2, this.max = 1000000});
 
-  UsNumberTextInputFormatter({
-    this.digit = 2,
-    this.max = 1000000
-  });
-
-  /// 允许输入的小数位数，-1代表不限制位数
+  /// The number of decimal places allowed to be entered, -1 means unlimited digits
   final int digit;
-  /// 允许输入的最大值
+
+  /// Maximum value allowed
   final double max;
 
   static const double _kDefaultDouble = 0.001;
-  
+
   double _strToFloat(String str, [double defaultValue = _kDefaultDouble]) {
     try {
       return double.parse(str);
@@ -23,7 +20,7 @@ class UsNumberTextInputFormatter extends TextInputFormatter {
     }
   }
 
-  ///获取目前的小数位数
+  ///Get the current number of decimal places
   int _getValueDigit(String value) {
     if (value.contains('.')) {
       return value.split('.')[1].length;
@@ -33,15 +30,18 @@ class UsNumberTextInputFormatter extends TextInputFormatter {
   }
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     String value = newValue.text;
     int selectionIndex = newValue.selection.end;
     if (value == '.') {
       value = '0.';
       selectionIndex++;
-    } else if (value != '' && value != _kDefaultDouble.toString() &&
-        _strToFloat(value) == _kDefaultDouble ||
-        _getValueDigit(value) > digit || _strToFloat(value) > max) {
+    } else if (value != '' &&
+            value != _kDefaultDouble.toString() &&
+            _strToFloat(value) == _kDefaultDouble ||
+        _getValueDigit(value) > digit ||
+        _strToFloat(value) > max) {
       value = oldValue.text;
       selectionIndex = oldValue.selection.end;
     }

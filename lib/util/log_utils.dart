@@ -1,11 +1,9 @@
-
 import 'dart:convert' as convert;
 import 'package:common_utils/common_utils.dart';
 import 'package:flutter_deer/res/constant.dart';
 
-/// 输出Log工具类
+/// Output Log tool class
 class Log {
-
   static const String tag = 'DEER-LOG';
 
   static void init() {
@@ -35,14 +33,18 @@ class Log {
         } else {
           LogUtil.v(msg, tag: tag);
         }
-      } catch(e) {
+      } catch (e) {
         LogUtil.e(msg, tag: tag);
       }
     }
   }
 
   // https://github.com/Milad-Akarie/pretty_dio_logger
-  static void _printMap(Map<dynamic, dynamic> data, {String tag = tag, int tabs = 1, bool isListItem = false, bool isLast = false}) {
+  static void _printMap(Map<dynamic, dynamic> data,
+      {String tag = tag,
+      int tabs = 1,
+      bool isListItem = false,
+      bool isLast = false}) {
     final bool isRoot = tabs == 1;
     final String initialIndent = _indent(tabs);
     tabs++;
@@ -59,7 +61,8 @@ class Log {
       }
       if (value is Map) {
         if (value.isEmpty) {
-          LogUtil.v('${_indent(tabs)} $key: $value${!isLast ? ',' : ''}', tag: tag);
+          LogUtil.v('${_indent(tabs)} $key: $value${!isLast ? ',' : ''}',
+              tag: tag);
         } else {
           LogUtil.v('${_indent(tabs)} $key: {', tag: tag);
           _printMap(value, tabs: tabs);
@@ -96,7 +99,7 @@ class Log {
     });
   }
 
-  /// 避免一秒内输出过多行数的日志被限制显示
+  /// Avoid the display of logs that output too many lines in one second
   /// Single process limit 250/s drop 66 lines.
   static bool _canFlattenMap(Map<dynamic, dynamic> map, List<dynamic> list) {
     return list.length * map.length > 100;

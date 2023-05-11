@@ -3,24 +3,23 @@ import 'dart:io';
 import 'package:flutter/services.dart';
 
 /// https://github.com/flutter/flutter/issues/25511
-/// 主要针对TextInput有设置maxLength且在iOS平台使用原生输入法输入中文时崩溃问题。
-/// 使用方法：
+/// It is mainly aimed at the problem of setting maxLength for TextInput and crashing when using the native input method to input Chinese on the iOS platform.
+/// Instructions:
 /// TextField(
 ///   inputFormatters: [FixIOSTextInputFormatter()],
 /// )
-/// 使用后问题是输入的拼音不展示。
+/// The problem after use is that the input pinyin is not displayed.
 ///
-/// 1.22已修复：https://github.com/flutter/flutter/pull/63754
-@Deprecated('1.22已修复')
+/// 1.22 Fixed：https://github.com/flutter/flutter/pull/63754
+@Deprecated('1.22fixed')
 class FixIOSTextInputFormatter extends TextInputFormatter {
-
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
     if (Platform.isIOS) {
-      // ios Composing变化也执行format，因为在拼音阶段没有执行LengthLimitingTextInputFormatter，从拼音到汉字需要重新执行
+      // ios Composing changes also execute format, because LengthLimitingTextInputFormatter is not executed in the Pinyin stage, and it needs to be re-executed from Pinyin to Chinese characters
       if (newValue.composing.isValid) {
-        // ios拼音阶段不执行长度限制的format
+        // The ios pinyin stage does not implement the format of the length limit
         return TextEditingValue.empty;
       }
     }
@@ -29,5 +28,4 @@ class FixIOSTextInputFormatter extends TextInputFormatter {
       selection: TextSelection.collapsed(offset: newValue.selection.end),
     );
   }
-
 }

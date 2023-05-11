@@ -1,14 +1,14 @@
 import 'package:flutter/widgets.dart';
 
 /// @weilu https://github.com/simplezhli/flutter_deer
-/// 
-/// 便于管理ChangeNotifier，不用重复写模板代码。
-/// 之前：
+///
+/// It is easy to manage ChangeNotifier without repeating template code.
+/// Before:
 /// ```dart
 /// class TestPageState extends State<TestPage> {
 ///   final TextEditingController _controller = TextEditingController();
 ///   final FocusNode _nodeText = FocusNode();
-///   
+///
 ///   @override
 ///   void initState() {
 ///     _controller.addListener(callback);
@@ -24,7 +24,7 @@ import 'package:flutter/widgets.dart';
 ///   }
 /// }
 /// ```
-/// 使用示例：
+/// Example usage:
 /// ```dart
 /// class TestPageState extends State<TestPage> with ChangeNotifierMixin<TestPage> {
 ///   final TextEditingController _controller = TextEditingController();
@@ -40,18 +40,17 @@ import 'package:flutter/widgets.dart';
 /// }
 /// ```
 mixin ChangeNotifierMixin<T extends StatefulWidget> on State<T> {
-
   Map<ChangeNotifier?, List<VoidCallback>?>? _map;
 
   Map<ChangeNotifier?, List<VoidCallback>?>? changeNotifier();
-  
+
   @override
   void initState() {
     _map = changeNotifier();
-    /// 遍历数据，如果callbacks不为空则添加监听
-    _map?.forEach((changeNotifier, callbacks) { 
-      if (callbacks != null && callbacks.isNotEmpty) {
 
+    /// Traverse the data, if the callbacks are not empty, add a listener
+    _map?.forEach((changeNotifier, callbacks) {
+      if (callbacks != null && callbacks.isNotEmpty) {
         void addListener(VoidCallback callback) {
           changeNotifier?.addListener(callback);
         }
