@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 ///https://github.com/elileo1/flutter_travel_friends/blob/master/lib/widget/PopupWindow.dart
 ///
 /// weilu update：
-/// 1.去除了IntrinsicWidth限制，添加了默认蒙版。
-/// 2.简化position计算。
+/// 1.Removed IntrinsicWidth limitation, added default mask.
+/// 2.Simplify position calculation.
 const Duration _kWindowDuration = Duration.zero;
 const double _kWindowCloseIntervalEnd = 2.0 / 3.0;
 const double _kWindowScreenPadding = 0.001;
 
-///弹窗方法
+///pop-up method
 Future<T?> showPopupWindow<T>({
   required BuildContext context,
   required RenderBox anchor,
@@ -20,7 +20,6 @@ Future<T?> showPopupWindow<T>({
   String? semanticLabel,
   bool isShowBg = false,
 }) {
-
   switch (defaultTargetPlatform) {
     case TargetPlatform.iOS:
     case TargetPlatform.macOS:
@@ -31,9 +30,10 @@ Future<T?> showPopupWindow<T>({
     case TargetPlatform.windows:
       semanticLabel ??= MaterialLocalizations.of(context).popupMenuLabel;
   }
-  final RenderBox? overlay = Overlay.of(context).context.findRenderObject() as RenderBox?;
+  final RenderBox? overlay =
+      Overlay.of(context).context.findRenderObject() as RenderBox?;
 
-  // 默认位置锚点下方
+  // Below the default position anchor
   final Offset defaultOffset = Offset(0, anchor.size.height);
 
   if (offset == null) {
@@ -41,25 +41,27 @@ Future<T?> showPopupWindow<T>({
   } else {
     offset = offset + defaultOffset;
   }
-  // 获得控件左下方的坐标
+  // Get the coordinates of the bottom left of the control
   final a = anchor.localToGlobal(offset, ancestor: overlay);
-  // 获得控件右下方的坐标
-  final b = anchor.localToGlobal(anchor.size.bottomLeft(offset), ancestor: overlay);
+  // Get the coordinates of the bottom right of the control
+  final b =
+      anchor.localToGlobal(anchor.size.bottomLeft(offset), ancestor: overlay);
   final RelativeRect position = RelativeRect.fromRect(
     Rect.fromPoints(a, b),
     Offset.zero & overlay!.size,
   );
-  return Navigator.push(context,
+  return Navigator.push(
+      context,
       _PopupWindowRoute(
-        position: position,
-        child: child,
-        semanticLabel: semanticLabel,
-        barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
-        isShowBg: isShowBg
-      ));
+          position: position,
+          child: child,
+          semanticLabel: semanticLabel,
+          barrierLabel:
+              MaterialLocalizations.of(context).modalBarrierDismissLabel,
+          isShowBg: isShowBg));
 }
 
-///自定义弹窗路由：参照_PopupMenuRoute修改的
+///Custom popup routing: refer to _PopupMenuRoute modified
 class _PopupWindowRoute<T> extends PopupRoute<T> {
   _PopupWindowRoute({
     super.settings,
@@ -74,7 +76,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
   final RelativeRect position;
   final String? semanticLabel;
   final bool isShowBg;
-  
+
   @override
   Color? get barrierColor => null;
 
@@ -121,8 +123,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
                 color: isShowBg ? const Color(0x99000000) : null,
                 child: CustomSingleChildLayout(
                   delegate: _PopupWindowLayoutDelegate(
-                    position, Directionality.of(context)
-                  ),
+                      position, Directionality.of(context)),
                   child: win,
                 ),
               ),
@@ -134,7 +135,7 @@ class _PopupWindowRoute<T> extends PopupRoute<T> {
   }
 }
 
-///自定义弹窗控件：对自定义的弹窗内容进行再包装，添加长宽、动画等约束条件
+///Custom pop-up window control: repackage the custom pop-up window content, add constraints such as length, width, animation, etc.
 class _PopupWindow<T> extends StatelessWidget {
   const _PopupWindow({
     super.key,
@@ -151,9 +152,11 @@ class _PopupWindow<T> extends StatelessWidget {
     const double unit = 1.0 /
         (length + 1.5); // 1.0 for the width and 0.5 for the last item's fade.
 
-    final CurveTween opacity = CurveTween(curve: const Interval(0.0, 1.0 / 3.0));
+    final CurveTween opacity =
+        CurveTween(curve: const Interval(0.0, 1.0 / 3.0));
     final CurveTween width = CurveTween(curve: const Interval(0.0, unit));
-    final CurveTween height = CurveTween(curve: const Interval(0.0, unit * length));
+    final CurveTween height =
+        CurveTween(curve: const Interval(0.0, unit * length));
 
     final Widget child = SingleChildScrollView(
       child: route.child,
@@ -183,10 +186,9 @@ class _PopupWindow<T> extends StatelessWidget {
   }
 }
 
-///自定义委托内容：子控件大小及其位置计算
+///Custom delegate content: child control size and position calculation
 class _PopupWindowLayoutDelegate extends SingleChildLayoutDelegate {
-  _PopupWindowLayoutDelegate(
-      this.position, this.textDirection);
+  _PopupWindowLayoutDelegate(this.position, this.textDirection);
 
   final RelativeRect position;
   final TextDirection textDirection;
@@ -196,7 +198,8 @@ class _PopupWindowLayoutDelegate extends SingleChildLayoutDelegate {
     // The menu can be at most the size of the overlay minus 8.0 pixels in each
     // direction.
     return BoxConstraints.loose(constraints.biggest -
-        const Offset(_kWindowScreenPadding * 2.0, _kWindowScreenPadding * 2.0) as Size);
+        const Offset(
+            _kWindowScreenPadding * 2.0, _kWindowScreenPadding * 2.0) as Size);
   }
 
   @override

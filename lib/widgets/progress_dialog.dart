@@ -4,7 +4,6 @@ import 'package:flutter_deer/res/resources.dart';
 
 /// 加载中的弹框
 class ProgressDialog extends Dialog {
-
   const ProgressDialog({
     super.key,
     this.hintText = '',
@@ -14,23 +13,26 @@ class ProgressDialog extends Dialog {
 
   @override
   Widget build(BuildContext context) {
-    
     final Widget progress = Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Theme(
           data: ThemeData(
             cupertinoOverrideTheme: const CupertinoThemeData(
-              brightness: Brightness.dark, // 局部指定夜间模式，加载圈颜色会设置为白色
+              brightness: Brightness
+                  .dark, // Partially specify night mode, the color of the loading circle will be set to white
             ),
           ),
           child: const CupertinoActivityIndicator(radius: 14.0),
         ),
         Gaps.vGap8,
-        Text(hintText, style: const TextStyle(color: Colors.white),)
+        Text(
+          hintText,
+          style: const TextStyle(color: Colors.white),
+        )
       ],
     );
-    
+
     return Material(
       type: MaterialType.transparency,
       child: Center(
